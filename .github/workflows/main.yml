@@ -30,3 +30,14 @@ jobs:
         run: composer install --prefer-dist --no-interaction --no-progress
       - name: Update CIDRs
         run: php bin/console app:download -vvv
+      - name: Push updates
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config --global user.email "action@github.com";
+            git config --global user.name "Update Bot";
+            git add data;
+            git commit -m "Updated CIDRs on $(date -Iminutes)";
+            git push;
+          else
+            echo "no changes";
+          fi
