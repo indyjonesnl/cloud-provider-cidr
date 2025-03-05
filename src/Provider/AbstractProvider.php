@@ -9,6 +9,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 abstract readonly class AbstractProvider implements ProviderInterface
 {
+    protected const string IP_REGEX = '/([0-9]{1,3}\.){3}[0-9]{1,3}($|\/(3[012]|[12][0-9]|[1-9]))/';
+
     public function __construct(
         private HttpClientInterface $httpClient,
     )

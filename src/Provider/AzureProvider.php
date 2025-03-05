@@ -30,7 +30,7 @@ final readonly class AzureProvider extends AbstractProvider
             if (isset($value['properties'])) {
                 if (isset($value['properties']['addressPrefixes'])) {
                     foreach ($value['properties']['addressPrefixes'] as $address) {
-                        if (preg_match('/([0-9]{1,3}\.){3}[0-9]{1,3}($|\/([1-9]|[12][0-9]|3[012]))/', $address, $matches)) {
+                        if (preg_match(self::IP_REGEX, $address, $matches)) {
                             $cidrList[] = $matches[0];
                         }
                     }

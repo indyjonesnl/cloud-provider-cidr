@@ -22,7 +22,7 @@ final readonly class IbmCloudProvider extends AbstractProvider
 
         /** @var \DOMElement[] $tableData */
         foreach ($tableData as $td) {
-            if (preg_match('/([0-9]{1,3}\.){3}[0-9]{1,3}($|\/([1-9]|[12][0-9]|3[012]))/', $td->textContent, $matches)) {
+            if (preg_match(self::IP_REGEX, $td->textContent, $matches)) {
                 if (!str_starts_with($matches[0], '10.')) {
                     $cidrList[] = $matches[0];
                 }

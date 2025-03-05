@@ -5,6 +5,8 @@ A CIDR list can be used to block/throttle incoming web requests, so crawlers/scr
 
 ### Cloud providers:
 
+- [Alibaba Cloud](./data/alibaba.txt)
+
 - [Amazon Web Services (AWS)](./data/aws.txt)
 
 - [Microsoft Azure](./data/azure.txt)
