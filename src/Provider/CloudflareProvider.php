@@ -4,17 +4,8 @@ declare(strict_types=1);
 
 namespace App\Provider;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-
-final readonly class CloudflareProvider implements ProviderInterface
+final readonly class CloudflareProvider extends AbstractProvider
 {
-    public function __construct(
-        private HttpClientInterface $httpClient,
-    )
-    {
-    }
-
     public function getName(): string
     {
         return 'cloudflare';
@@ -22,8 +13,7 @@ final readonly class CloudflareProvider implements ProviderInterface
 
     public function getCidrList(): iterable
     {
-        $response = $this->httpClient->request(Request::METHOD_GET, 'https://www.cloudflare.com/ips-v4');
-        $cidrList = explode(PHP_EOL, $response->getContent());
+        $cidrList = explode(PHP_EOL, $this->getContent('https://www.cloudflare.com/ips-v4'));
         sort($cidrList);
         return $cidrList;
     }
