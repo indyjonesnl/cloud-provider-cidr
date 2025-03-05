@@ -8,21 +8,16 @@ use App\Provider\ProviderInterface;
 
 final readonly class CidrService
 {
-    /** @param ProviderInterface[] $providers */
+    /** @param iterable<ProviderInterface> $providers */
     public function __construct(
         private iterable $providers,
     )
     {
     }
 
-    public function getCidrList(string $name): ?array
+    /** @return iterable<ProviderInterface> */
+    public function getProviders(): iterable
     {
-        foreach($this->providers as $provider) {
-            if ($provider->getName() === $name) {
-                return $provider->getCidrList();
-            }
-        }
-
-        return null;
+        return $this->providers;
     }
 }

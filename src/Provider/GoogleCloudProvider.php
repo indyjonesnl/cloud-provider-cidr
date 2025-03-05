@@ -7,7 +7,7 @@ namespace App\Provider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final readonly class AwsProvider implements ProviderInterface
+final readonly class GoogleCloudProvider implements ProviderInterface
 {
     public function __construct(
         private HttpClientInterface $httpClient,
@@ -17,18 +17,22 @@ final readonly class AwsProvider implements ProviderInterface
 
     public function getName(): string
     {
-        return 'aws';
+        return 'gcp';
     }
 
     public function getCidrList(): iterable
     {
-        $response = $this->httpClient->request(Request::METHOD_GET, 'https://ip-ranges.amazonaws.com/ip-ranges.json');
-        $decoded = \json_decode($response->getContent(), true, flags: JSON_THROW_ON_ERROR);
+        $response = $this->httpClient->request(Request::METHOD_GET, 'https://www.gstatic.com/ipranges/cloud.json');
+        $decoded = json_decode($response->getContent(), true, flags: JSON_THROW_ON_ERROR);
         $cidrList = [];
         foreach($decoded['prefixes'] as $prefix) {
-            $cidrList[] = $prefix['ip_prefix'];
+            if (isset($prefix['ipv4Prefix'])) {
+                $cidrList[] = $prefix['ipv4Prefix'];
+            }
         }
+
         sort($cidrList);
+
         return $cidrList;
     }
 }

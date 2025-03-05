@@ -10,7 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand(name: 'app:download', description: 'Hello PhpStorm')]
+#[AsCommand(name: 'app:download', description: 'Download CIDR\'s from cloud providers.')]
 final class DownloadCloudProviderDataCommand extends Command
 {
     public function __construct(
@@ -22,9 +22,13 @@ final class DownloadCloudProviderDataCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $cidrList = $this->cidrService->getCidrList('AWS');
-        $output->writeln('Downloaded ' . count($cidrList) . ' CIDR\'s.');
-        file_put_contents(__DIR__ . '/../../data/aws.txt', implode(PHP_EOL, $cidrList));
+        $providers = $this->cidrService->getProviders();
+
+        foreach ($providers as $provider) {
+            $cidrList = $provider->getCidrList();
+            $output->writeln('Downloaded ' . count($cidrList) . ' CIDR\'s from provider ' . $provider->getName() . '.');
+            file_put_contents(__DIR__ . '/../../data/' . $provider->getName() . '.txt', implode(PHP_EOL, $cidrList));
+        }
 
         return Command::SUCCESS;
     }
