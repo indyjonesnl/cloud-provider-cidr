@@ -9,7 +9,6 @@ use Symfony\Component\DomCrawler\Crawler;
 final readonly class HetznerProvider extends AbstractProvider
 {
     private const string URL = 'https://whois.ipip.net/AS24940';
-
     private const string XPATH = '//div[@id="pills-ipv4"]//table//tr/td[contains(text(),"Hetzner Online GmbH")]/../td[1]/a/text()';
 
     public function getName(): string
@@ -21,11 +20,11 @@ final readonly class HetznerProvider extends AbstractProvider
     {
         $content = $this->getContent(self::URL);
         $crawler = new Crawler($content);
-        $elements = $crawler->filterXPath(self::XPATH);
+        $texts = $crawler->filterXPath(self::XPATH);
 
         $cidrList = [];
-        foreach ($elements as $element) {
-            $cidrList[] = $element->textContent;
+        foreach ($texts as $text) {
+            $cidrList[] = $text->textContent;
         }
 
         sort($cidrList);

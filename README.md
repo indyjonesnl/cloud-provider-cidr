@@ -7,16 +7,22 @@ A CIDR list can be used to block/throttle incoming web requests, so crawlers/scr
 
 Download all CIDR ranges from all providers:
 ```shell
-bin/console app:download
+  bin/console app:download
 ```
 
 Run a single provider (for testing purposes), passing the provider name:
 ```shell
-bin/console app:single hetzner
+  bin/console app:single hetzner
 ```
-Note: add `-vvv` to the command (`bin/console app:single aws -vvv`) for verbose mode.
+
+Note: add `-vvv` to the command for verbose mode:
+```shell
+  bin/console app:single aws -vvv
+```
 
 ### Cloud providers:
+
+- [Akamai Cloud (including Linode)](./data/akamai.txt)
 
 - [Alibaba Cloud](./data/alibaba.txt)
 

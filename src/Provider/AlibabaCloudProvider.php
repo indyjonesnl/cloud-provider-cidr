@@ -8,6 +8,9 @@ use Symfony\Component\DomCrawler\Crawler;
 
 final readonly class AlibabaCloudProvider extends AbstractProvider
 {
+    private const string XPATH = '//div[@id="pills-ipv4"]//table/tr/td[1]/a/text()';
+    private const string URL = 'https://whois.ipip.net/AS37963';
+
     public function getName(): string
     {
         return 'alibaba';
@@ -15,17 +18,14 @@ final readonly class AlibabaCloudProvider extends AbstractProvider
 
     public function getCidrList(): iterable
     {
-        $content = $this->getContent('https://whois.ipip.net/AS37963');
+        $content = $this->getContent(self::URL);
         $crawler = new Crawler($content);
-        $texts = $crawler->filterXPath('//table/tr/td[1]/a/text()');
+        $texts = $crawler->filterXPath(self::XPATH);
 
         $cidrList = [];
 
-        /** @var \DOMText $text */
         foreach ($texts as $text) {
-            if (preg_match(self::IP_REGEX, $text->textContent, $matches)) {
-                $cidrList[] = $matches[0];
-            }
+            $cidrList[] = $text->textContent;
         }
 
         sort($cidrList);
