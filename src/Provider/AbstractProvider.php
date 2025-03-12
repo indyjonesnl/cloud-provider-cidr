@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Provider;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 abstract readonly class AbstractProvider implements ProviderInterface
@@ -15,6 +16,14 @@ abstract readonly class AbstractProvider implements ProviderInterface
         private HttpClientInterface $httpClient,
     )
     {
+    }
+
+    public function downloadToFile(string $filename): int
+    {
+        $cidrList = $this->getCidrList();
+        file_put_contents($filename, implode(PHP_EOL, $cidrList));
+
+        return count($cidrList);
     }
 
     protected function getContent(string $path): string
@@ -31,7 +40,11 @@ abstract readonly class AbstractProvider implements ProviderInterface
             ],
         );
 
-        if (array_key_exists('content-encoding', $response->getHeaders()) && in_array('gzip', $response->getHeaders()['content-encoding'])) {
+        if (
+            $response->getStatusCode() === Response::HTTP_OK &&
+            array_key_exists('content-encoding', $response->getHeaders()) &&
+            in_array('gzip', $response->getHeaders()['content-encoding'])
+        ) {
             return gzdecode($response->getContent());
         }
 

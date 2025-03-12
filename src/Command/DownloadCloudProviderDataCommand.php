@@ -25,9 +25,8 @@ final class DownloadCloudProviderDataCommand extends Command
         $providers = $this->cidrService->getProviders();
 
         foreach ($providers as $provider) {
-            $cidrList = $provider->getCidrList();
-            $output->writeln('Downloaded ' . count($cidrList) . ' CIDR\'s from provider ' . $provider->getName() . '.');
-            file_put_contents(__DIR__ . '/../../data/' . $provider->getName() . '.txt', implode(PHP_EOL, $cidrList));
+            $count = $provider->downloadToFile(__DIR__ . '/../../data/' . $provider->getName() . '.txt');
+            $output->writeln('Downloaded ' . $count . ' CIDR\'s from provider ' . $provider->getName() . '.');
         }
 
         return Command::SUCCESS;

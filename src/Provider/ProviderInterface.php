@@ -13,4 +13,7 @@ interface ProviderInterface
 
     /** @return string[] */
     public function getCidrList(): iterable;
+
+    /** @return int Number of CIDR addresses downloaded. */
+    public function downloadToFile(string $filename): int;
 }

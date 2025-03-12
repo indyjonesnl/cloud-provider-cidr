@@ -42,12 +42,11 @@ final class RunSingleProviderCommand extends Command
             return self::FAILURE;
         }
 
+        $filename = __DIR__ . '/../../data/' . $providerName . '.txt';
         $output->writeln('<info>Running provider now.</info>');
-        $cidrList = $cidrProvider->getCidrList();
-        $output->writeln('<info>Provider loaded ' . count($cidrList) . ' cidr addresses.</info>');
-        $fileName = __DIR__ . '/../../data/single_run_' . $providerName . '.txt';
-        file_put_contents($fileName, implode(PHP_EOL, $cidrList));
-        $output->writeln('<info>Done writing cidr addresses to file: ' . realpath($fileName) . '</info>');
+        $count = $cidrProvider->downloadToFile($filename);
+        $output->writeln('<info>Provider loaded ' . $count . ' cidr addresses.</info>');
+        $output->writeln('<info>Done writing CIDR addresses to file: ' . realpath($filename) . '</info>');
 
         return self::SUCCESS;
     }
