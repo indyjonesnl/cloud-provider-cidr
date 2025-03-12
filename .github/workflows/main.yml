@@ -28,9 +28,34 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
-      - name: Update CIDRs
-        run: php bin/console app:download -vvv
+      - name: Download akamai
+        run: php bin/console app:single akamai -vvv
+      - name: Download alibaba
+        if: '!cancelled()'
+        run: php bin/console app:single alibaba -vvv
+      - name: Download aws
+        if: '!cancelled()'
+        run: php bin/console app:single aws -vvv
+      - name: Download azure
+        if: '!cancelled()'
+        run: php bin/console app:single azure -vvv
+      - name: Download cloudflare
+        if: '!cancelled()'
+        run: php bin/console app:single cloudflare -vvv
+      - name: Download gcp
+        if: '!cancelled()'
+        run: php bin/console app:single gcp -vvv
+      - name: Download hetzner
+        if: '!cancelled()'
+        run: php bin/console app:single hetzner -vvv
+      - name: Download ibm
+        if: '!cancelled()'
+        run: php bin/console app:single ibm -vvv
+      - name: Download oracle
+        if: '!cancelled()'
+        run: php bin/console app:single oracle -vvv
       - name: Push updates
+        if: '!cancelled()'
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git config --global user.email "github-actions[bot]@users.noreply.github.com";
@@ -41,6 +66,7 @@ jobs:
             echo "no changes";
           fi
       - name: Push changes
+        if: '!cancelled()'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
