@@ -39,3 +39,5 @@ Note: add `-vvv` to the command for verbose mode:
 - [Microsoft Azure](./data/azure.txt)
 
 - [Oracle Cloud](./data/oracle.txt)
+
+- [Strato](./data/strato.txt)

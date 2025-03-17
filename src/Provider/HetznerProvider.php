@@ -4,31 +4,20 @@ declare(strict_types=1);
 
 namespace App\Provider;
 
-use Symfony\Component\DomCrawler\Crawler;
-
-final readonly class HetznerProvider extends AbstractProvider
+final readonly class HetznerProvider extends IpipProvider
 {
-    private const string URL = 'https://whois.ipip.net/AS24940';
-    private const string XPATH = '//div[@id="pills-ipv4"]//table//tr/td[contains(text(),"Hetzner Online GmbH")]/../td[1]/a/text()';
-
     public function getName(): string
     {
         return 'hetzner';
     }
 
-    public function getCidrList(): iterable
+    public function getUrls(): array
     {
-        $content = $this->getContent(self::URL);
-        $crawler = new Crawler($content);
-        $texts = $crawler->filterXPath(self::XPATH);
+        return ['https://whois.ipip.net/AS24940'];
+    }
 
-        $cidrList = [];
-        foreach ($texts as $text) {
-            $cidrList[] = $text->textContent;
-        }
-
-        sort($cidrList);
-
-        return $cidrList;
+    protected function getXpath(): string
+    {
+        return '//div[@id="pills-ipv4"]//table//tr/td[contains(text(),"Hetzner Online GmbH")]/../td[1]/a/text()';
     }
 }

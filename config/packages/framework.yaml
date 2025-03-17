@@ -1,12 +1,31 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
     secret: '%env(APP_SECRET)%'
+    ide: '%env(IDE)%'
 
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 
     #esi: true
     #fragments: true
+
+    http_client:
+        default_options:
+            timeout: 25
+            headers:
+                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; rv:109.0) Gecko/20100101 Firefox/115.'
+                Accept: application/json
+            http_version: '2.0'
+            retry_failed:
+                http_codes:
+                    0: [ 'GET', 'HEAD' ]   # retry network errors if request method is GET or HEAD
+                    429: true              # retry all responses with 429 status code
+                    500: [ 'GET', 'HEAD' ]
+                max_retries: 2
+                delay: 1000
+                multiplier: 3
+                max_delay: 10000
+                jitter: 0.3
 
 when@test:
     framework:
